@@ -47,6 +47,9 @@ type Options struct {
 	DisablePodNonGenericResourceMetrics  bool
 	DisableNodeNonGenericResourceMetrics bool
 
+	AppMetricLabel string
+	AppAnnotation  string
+
 	EnableGZIPEncoding bool
 
 	flags *pflag.FlagSet
@@ -99,6 +102,9 @@ func (o *Options) AddFlags() {
 	o.flags.BoolVarP(&o.DisablePodNonGenericResourceMetrics, "disable-pod-non-generic-resource-metrics", "", false, "Disable pod non generic resource request and limit metrics")
 	o.flags.BoolVarP(&o.DisableNodeNonGenericResourceMetrics, "disable-node-non-generic-resource-metrics", "", false, "Disable node non generic resource request and limit metrics")
 	o.flags.BoolVar(&o.EnableGZIPEncoding, "enable-gzip-encoding", false, "Gzip responses when requested by clients via 'Accept-Encoding: gzip' header.")
+
+	o.flags.StringVar(&o.AppMetricLabel, "app-metric-label", "caicloud_app_key", "Name of the metric label denoting an application")
+	o.flags.StringVar(&o.AppAnnotation, "app-annotation", "helm.sh/release", "Name of the Pod annotation denoting the application to which it belongs")
 }
 
 // Parse parses the flag definitions from the argument list.

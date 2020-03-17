@@ -77,6 +77,8 @@ func main() {
 		os.Exit(0)
 	}
 	storeBuilder := store.NewBuilder()
+	store.AppMetricLabel = opts.AppMetricLabel
+	store.AppAnnotation = opts.AppAnnotation
 
 	ksmMetricsRegistry := prometheus.NewRegistry()
 	storeBuilder.WithMetrics(ksmMetricsRegistry)
