@@ -68,6 +68,11 @@ type Builder struct {
 	totalShards      int
 }
 
+var (
+	AppAnnotation  string
+	AppMetricLabel string
+)
+
 // NewBuilder returns a new builder.
 func NewBuilder() *Builder { return &Builder{} }
 
