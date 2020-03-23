@@ -17,6 +17,7 @@ limitations under the License.
 package store
 
 import (
+	"fmt"
 	"strconv"
 
 	"k8s.io/kube-state-metrics/pkg/constant"
@@ -54,11 +55,14 @@ var (
 						createdByName = createdBy.Name
 					}
 				}
-
+				caicloud_app_key := ""
+				if app := p.ObjectMeta.Annotations[AppAnnotation]; app != "" {
+					caicloud_app_key = fmt.Sprintf("%s/%s", p.Namespace, app)
+				}
 				m := metric.Metric{
 
 					LabelKeys:   []string{"host_ip", "pod_ip", "uid", "node", "created_by_kind", "created_by_name", "priority_class", AppMetricLabel},
-					LabelValues: []string{p.Status.HostIP, p.Status.PodIP, string(p.UID), p.Spec.NodeName, createdByKind, createdByName, p.Spec.PriorityClassName, p.ObjectMeta.Annotations[AppAnnotation]},
+					LabelValues: []string{p.Status.HostIP, p.Status.PodIP, string(p.UID), p.Spec.NodeName, createdByKind, createdByName, p.Spec.PriorityClassName, caicloud_app_key},
 					Value:       1,
 				}
 
