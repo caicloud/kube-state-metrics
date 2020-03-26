@@ -363,12 +363,17 @@ var (
 			Help: "Information about a container in a pod.",
 			GenerateFunc: wrapPodFunc(func(p *v1.Pod) *metric.Family {
 				ms := make([]*metric.Metric, len(p.Status.ContainerStatuses))
-				labelKeys := []string{"container", "image", "image_id", "container_id"}
+				labelKeys := []string{"container", "image", "image_id", "container_id", AppMetricLabel}
+
+				caicloud_app_key := ""
+				if app := p.ObjectMeta.Annotations[AppAnnotation]; app != "" {
+					caicloud_app_key = fmt.Sprintf("%s/%s", p.Namespace, app)
+				}
 
 				for i, cs := range p.Status.ContainerStatuses {
 					ms[i] = &metric.Metric{
 						LabelKeys:   labelKeys,
-						LabelValues: []string{cs.Name, cs.Image, cs.ImageID, cs.ContainerID},
+						LabelValues: []string{cs.Name, cs.Image, cs.ImageID, cs.ContainerID, caicloud_app_key},
 						Value:       1,
 					}
 				}
